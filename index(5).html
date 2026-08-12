@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropeum Export Tools</title>
+<meta name="description" content="Choose the Anthropeum export setup for your device and browser.">
+<style>
+  :root {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #f5f6f8;
+    color: #111;
+  }
+  main {
+    width: min(860px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 26px 0 48px;
+  }
+  header {
+    margin-bottom: 18px;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+  }
+  .lead {
+    margin: 0;
+    color: #4b5056;
+    line-height: 1.5;
+  }
+  .menu-card {
+    background: #fff;
+    border: 1px solid #d8dce2;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    margin-bottom: 16px;
+  }
+  .menu-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 20px;
+    border: 0;
+    background: #111;
+    color: #fff;
+    font: inherit;
+    font-weight: 750;
+    font-size: 1.05rem;
+    cursor: pointer;
+  }
+  .burger {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+  }
+  .chooser {
+    display: none;
+    padding: 12px;
+    background: #fff;
+  }
+  .chooser.open {
+    display: grid;
+    gap: 10px;
+  }
+  .choice {
+    width: 100%;
+    text-align: left;
+    border: 1px solid #cfd4da;
+    border-radius: 10px;
+    background: #fff;
+    padding: 13px 14px;
+    font: inherit;
+    cursor: pointer;
+  }
+  .choice strong {
+    display: block;
+    margin-bottom: 3px;
+  }
+  .choice small {
+    color: #5b6168;
+  }
+  .panel {
+    display: none;
+    background: #fff;
+    border: 1px solid #d8dce2;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .panel.active {
+    display: block;
+  }
+  .eyebrow {
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #5a6068;
+    margin-bottom: 6px;
+  }
+  h2 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+  }
+  h3 {
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+  p, li {
+    line-height: 1.5;
+  }
+  ol {
+    padding-left: 1.25rem;
+  }
+  li {
+    margin: .48rem 0;
+  }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    border: 2px solid #111;
+    border-radius: 10px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    font: inherit;
+    font-weight: 750;
+    cursor: pointer;
+    margin: 10px 0 6px;
+  }
+  .button:focus-visible,
+  .menu-toggle:focus-visible,
+  .choice:focus-visible {
+    outline: 3px solid #777;
+    outline-offset: 3px;
+  }
+  details {
+    margin-top: 14px;
+    border-top: 1px solid #e2e5e9;
+    padding-top: 12px;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .note {
+    color: #555;
+    font-size: .93rem;
+  }
+  .status {
+    min-height: 1.5em;
+    margin: 8px 0 0;
+    font-weight: 650;
+  }
+  textarea {
+    width: 100%;
+    min-height: 130px;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #9aa0a6;
+    border-radius: 8px;
+    background: #fafafa;
+    color: #111;
+    font: 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .footer {
+    padding: 15px 17px;
+    background: #fff;
+    border: 1px solid #d8dce2;
+    border-radius: 14px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Anthropeum Export Tools</h1>
+    <p class="lead">
+      Choose the option that matches your device and browser. You only need to complete the setup once.
+      After each assigned game, export and save your CSV file.
+    </p>
+  </header>
+
+  <section class="menu-card">
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false">
+      <span>Choose your device / browser</span>
+      <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+
+    <div class="chooser" id="chooser">
+      <button class="choice" type="button" data-panel="desktopPanel">
+        <strong>Option 1 — Laptop/Desktop</strong>
+        <small>Google Chrome or Microsoft Edge</small>
+      </button>
+      <button class="choice" type="button" data-panel="safariPanel">
+        <strong>Option 2 — iPhone/iPad</strong>
+        <small>Safari</small>
+      </button>
+      <button class="choice" type="button" data-panel="mobilePanel">
+        <strong>Option 3 — Phone/Tablet</strong>
+        <small>Google Chrome or Firefox</small>
+      </button>
+    </div>
+  </section>
+
+  <section class="panel" id="desktopPanel">
+    <div class="eyebrow">Option 1</div>
+    <h2>Laptop or Desktop — Google Chrome or Microsoft Edge</h2>
+    <p>
+      We have created an extension in Google Chrome and Microsoft Edge that allows you
+      to download enriched quiz results and additional artefact data for use in a later section assignment.
+    </p>
+
+    <button class="button" id="downloadZipButton" type="button">
+      Download Desktop Extension ZIP
+    </button>
+
+    <details>
+      <summary>Show setup and export instructions</summary>
+
+      <h3>Installing the Extension</h3>
+      <ol>
+        <li>Click <strong>Download Desktop Extension ZIP</strong> above.</li>
+        <li>Double-click the ZIP file to unzip it.</li>
+        <li>Open Google Chrome or Microsoft Edge.</li>
+        <li>Go to <code>chrome://extensions</code> in Google Chrome or <code>edge://extensions</code> in Microsoft Edge.</li>
+        <li>Turn on <strong>Developer mode</strong>:
+          <ul>
+            <li>in the upper-right corner in Google Chrome;</li>
+            <li>on the left side in Microsoft Edge.</li>
+          </ul>
+        </li>
+        <li>Click <strong>Load unpacked</strong>.</li>
+        <li>Select the <strong>unzipped</strong> extension folder.</li>
+        <li>Confirm that the extension appears in the list and is switched on.</li>
+      </ol>
+
+      <h3>Completing and Exporting the Quiz</h3>
+      <ol>
+        <li>Open <code>https://anthropeum.com/</code>.</li>
+        <li>Complete the quiz and view the results.</li>
+        <li>The Met-recorded data, including geography and date, and the export buttons should appear automatically.</li>
+        <li>Click <strong>Export CSV</strong> to download your enriched results.</li>
+      </ol>
+
+      <p class="note">
+        Make sure you download the CSV file every time you complete the quiz.
+        <strong>You will need these files for a later section assignment.</strong>
+      </p>
+    </details>
+  </section>
+
+  <section class="panel" id="safariPanel">
+    <div class="eyebrow">Option 2</div>
+    <h2>iPhone or iPad — Safari</h2>
+    <p>
+      If you are using Safari on an iPhone or iPad, use the
+      <strong>Anthropeum Exporter Shortcut</strong> instead of the browser extension.
+    </p>
+
+    <a class="button" href="https://www.icloud.com/shortcuts/fad0eeb85d8e4802b683682838b9d21b" target="_blank" rel="noopener">
+      Install Safari Shortcut
+    </a>
+
+    <details>
+      <summary>Show setup and export instructions</summary>
+
+      <h3>Installing the Shortcut</h3>
+      <ol>
+        <li>Click <strong>Install Safari Shortcut</strong> above.</li>
+        <li>The Shortcuts app should open and display <strong>Anthropeum Exporter</strong>.</li>
+        <li>Tap <strong>Add Shortcut</strong>.</li>
+        <li>Confirm that <strong>Anthropeum Exporter</strong> appears in your Shortcuts app.</li>
+      </ol>
+
+      <p class="note">You only need to complete this setup once.</p>
+
+      <h3>Completing and Exporting the Quiz</h3>
+      <ol>
+        <li>Open <code>https://anthropeum.com/</code> in Safari.</li>
+        <li>Complete the quiz and remain on the page showing your results.</li>
+        <li>Tap Safari’s <strong>Share</strong> button.</li>
+        <li>Scroll through the Share Sheet and tap <strong>Anthropeum Exporter</strong>.</li>
+        <li>Wait while the shortcut processes the ten artefacts and retrieves additional information from The Metropolitan Museum of Art.</li>
+        <li>When prompted, choose where you want to save the CSV file.</li>
+        <li>Save the file to a location you can easily find later, such as <strong>Downloads</strong> or <strong>iCloud Drive</strong>.</li>
+      </ol>
+
+      <p class="note">
+        Make sure you save the CSV file every time you complete the quiz.
+        <strong>You will need these files for a later section assignment.</strong>
+      </p>
+    </details>
+  </section>
+
+  <section class="panel" id="mobilePanel">
+    <div class="eyebrow">Option 3</div>
+    <h2>Phone or Tablet — Google Chrome or Firefox</h2>
+    <p>
+      If you are using Google Chrome or Firefox on a phone or tablet, use the
+      <strong>Anthropeum Exporter bookmarklet</strong> instead of the desktop extension.
+    </p>
+
+    <button class="button" id="copyButton" type="button">
+      Copy Bookmarklet Code
+    </button>
+    <p class="status" id="copyStatus" aria-live="polite"></p>
+
+    <details>
+      <summary>Show setup and export instructions</summary>
+
+      <h3>One-Time Setup</h3>
+      <ol>
+        <li>First, tap <strong>Copy Bookmarklet Code</strong> above.</li>
+        <li>Open any webpage in Google Chrome or Firefox.</li>
+        <li>Save that page as a bookmark.</li>
+        <li>Open your browser’s bookmarks and edit the bookmark you just created.</li>
+        <li>Rename the bookmark <strong>Anthropeum Exporter</strong>.</li>
+        <li>Delete the existing URL/address in the bookmark.</li>
+        <li>Paste the bookmarklet code into the bookmark’s URL/address field.</li>
+        <li>Make sure the pasted code begins with <code>javascript:</code>.</li>
+        <li>Save the bookmark.</li>
+      </ol>
+
+      <p class="note">You only need to complete this setup once.</p>
+
+      <h3>Completing and Exporting the Quiz</h3>
+      <ol>
+        <li>Open <code>https://anthropeum.com/</code> in the same browser.</li>
+        <li>Complete the quiz and remain on the page showing your results.</li>
+        <li>Tap the browser’s address bar and begin typing <strong>Anthropeum Exporter</strong>.</li>
+        <li>Select the <strong>Anthropeum Exporter</strong> bookmark when it appears in the suggestions.</li>
+        <li>A box labeled <strong>Anthropeum Mobile Export</strong> should appear and begin processing the ten artefacts.</li>
+        <li>Wait until all objects have been processed.</li>
+        <li>Tap <strong>Download CSV</strong>.</li>
+        <li>Save the CSV file on your device.</li>
+      </ol>
+
+      <p class="note">
+        Make sure you save the CSV file every time you complete the quiz.
+        <strong>You will need these files for a later section assignment.</strong>
+      </p>
+
+      <details id="manualFallback">
+        <summary>Copy button not working?</summary>
+        <p class="note">
+          Select all of the code below and copy it manually. The code must begin with <code>javascript:</code>.
+        </p>
+        <textarea id="codeBox" readonly>javascript:(async()=&gt;{const q=s=&gt;document.querySelector(s),clean=s=&gt;(s||&#x27;&#x27;).replace(/\s+/g,&#x27; &#x27;).trim(),esc=s=&gt;&#x27;&quot;&#x27;+String(s??&#x27;&#x27;).replace(/&quot;/g,&#x27;&quot;&quot;&#x27;)+&#x27;&quot;&#x27;,num=s=&gt;{const t=clean(s).replace(/[−–—]/g,&#x27;-&#x27;).replace(/,/g,&#x27;&#x27;);const m=t.match(/[+-]?\d+(?:\.\d+)?/);return m?+m[0]:null},geo=o=&gt;{const a=[o.locale,o.locus,o.city,o.county,o.state,o.subregion,o.region,o.country].filter(Boolean);if(a.length)return(o.geographyType||&#x27;Associated with&#x27;)+&#x27;: &#x27;+[...new Set(a)].join(&#x27;, &#x27;);if(o.excavation)return&#x27;Excavation: &#x27;+o.excavation;if(o.culture)return&#x27;Culture: &#x27;+o.culture;if(o.artistNationality)return&#x27;Artist nationality: &#x27;+o.artistNationality;if(o.artistDisplayBio)return&#x27;Artist: &#x27;+o.artistDisplayBio;if(o.period)return&#x27;Period: &#x27;+o.period;if(o.dynasty)return&#x27;Dynasty: &#x27;+o.dynasty;return&#x27;Not specified in The Met API&#x27;},date=o=&gt;o.objectDate||((o.objectBeginDate||o.objectEndDate)?String(o.objectBeginDate||o.objectEndDate)+(o.objectEndDate&amp;&amp;o.objectEndDate!==o.objectBeginDate?&#x27;–&#x27;+o.objectEndDate:&#x27;&#x27;):&#x27;Not specified in The Met API&#x27;),box=document.createElement(&#x27;div&#x27;);box.style=&#x27;position:fixed;top:12px;left:10px;right:10px;z-index:2147483647;background:#fff;color:#111;border:2px solid #111;border-radius:10px;padding:14px;font:15px/1.4 sans-serif;max-height:80vh;overflow:auto&#x27;;box.innerHTML=&#x27;&lt;b&gt;Anthropeum Mobile Export&lt;/b&gt;&lt;br&gt;&lt;br&gt;Reading results…&#x27;;document.body.appendChild(box);const links=[...document.querySelectorAll(&#x27;a[href*=&quot;metmuseum.org/art/collection/search/&quot;]&#x27;)];if(!links.length){box.innerHTML=&#x27;&lt;b&gt;Anthropeum Mobile Export&lt;/b&gt;&lt;br&gt;&lt;br&gt;❌ No Met-linked results were found. Open your completed Anthropeum results page and try again.&lt;br&gt;&lt;br&gt;&lt;button onclick=&quot;this.parentElement.remove()&quot;&gt;Close&lt;/button&gt;&#x27;;return}const table=links[0].closest(&#x27;table&#x27;);if(!table){box.innerHTML=&#x27;&lt;b&gt;Anthropeum Mobile Export&lt;/b&gt;&lt;br&gt;&lt;br&gt;❌ The results table could not be identified.&lt;br&gt;&lt;br&gt;&lt;button onclick=&quot;this.parentElement.remove()&quot;&gt;Close&lt;/button&gt;&#x27;;return}const headers=[...table.querySelectorAll(&#x27;thead th&#x27;)].map(x=&gt;clean(x.innerText));const rows=[...table.querySelectorAll(&#x27;tbody tr&#x27;)].filter(r=&gt;r.querySelector(&#x27;a[href*=&quot;metmuseum.org/art/collection/search/&quot;]&#x27;));const H=headers.map(x=&gt;x.toUpperCase()),scoreI=H.findIndex(x=&gt;x===&#x27;TOTAL&#x27;||x.includes(&#x27;SCORE&#x27;)),diffI=H.findIndex(x=&gt;x.includes(&#x27;VS AVG&#x27;)||x.includes(&#x27;AVERAGE&#x27;)||x.includes(&#x27;DIFF&#x27;));box.innerHTML=&#x27;&lt;b&gt;Anthropeum Mobile Export&lt;/b&gt;&lt;br&gt;&lt;br&gt;Found &lt;b&gt;&#x27;+rows.length+&#x27;&lt;/b&gt; objects.&lt;br&gt;Retrieving Met metadata…&lt;br&gt;&lt;span id=&quot;anthroprog&quot;&gt;0/&#x27;+rows.length+&#x27;&lt;/span&gt;&#x27;;const out=[],d=new Date(),play=String(d.getFullYear()).slice(-2)+&#x27;/&#x27;+String(d.getMonth()+1).padStart(2,&#x27;0&#x27;)+&#x27;/&#x27;+String(d.getDate()).padStart(2,&#x27;0&#x27;);for(let i=0;i&lt;rows.length;i++){const r=rows[i],cells=[...r.querySelectorAll(&#x27;td&#x27;)].map(x=&gt;clean(x.innerText)),l=r.querySelector(&#x27;a[href*=&quot;metmuseum.org/art/collection/search/&quot;]&#x27;),m=l.href.match(/search\/(\d+)/),id=m&amp;&amp;m[1];let o=null;try{if(id){const res=await fetch(&#x27;https://collectionapi.metmuseum.org/public/collection/v1/objects/&#x27;+id);if(res.ok)o=await res.json()}}catch(e){}let av=&#x27;&#x27;;if(scoreI&gt;=0&amp;&amp;diffI&gt;=0){const s=num(cells[scoreI]),v=num(cells[diffI]);if(s!==null&amp;&amp;v!==null)av=(s-v).toLocaleString(&#x27;en-US&#x27;,{maximumFractionDigits:2})}out.push([play,...cells,o?geo(o):&#x27;Met API request failed&#x27;,o?date(o):&#x27;Met API request failed&#x27;,l.href,av]);const p=q(&#x27;#anthroprog&#x27;);if(p)p.textContent=(i+1)+&#x27;/&#x27;+rows.length;await new Promise(x=&gt;setTimeout(x,120))}const cols=[&#x27;Date&#x27;,...(headers.length?headers:[&#x27;#&#x27;,&#x27;ARTIFACT&#x27;,&#x27;DISTANCE&#x27;,&#x27;GEO&#x27;,&#x27;YEAR ERR&#x27;,&#x27;TIME&#x27;,&#x27;TOTAL&#x27;,&#x27;VS AVG&#x27;]),&#x27;Met-recorded geography&#x27;,&#x27;Met object date&#x27;,&#x27;Met collection URL&#x27;,&#x27;Average score among other players&#x27;];const csv=&#x27;\uFEFF&#x27;+[cols,...out].map(r=&gt;r.map(esc).join(&#x27;,&#x27;)).join(&#x27;\r\n&#x27;);const blob=new Blob([csv],{type:&#x27;text/csv;charset=utf-8&#x27;}),url=URL.createObjectURL(blob),fn=&#x27;anthropeum-&#x27;+play.replaceAll(&#x27;/&#x27;,&#x27;-&#x27;)+&#x27;.csv&#x27;;box.innerHTML=&#x27;&lt;b&gt;Anthropeum Mobile Export&lt;/b&gt;&lt;br&gt;&lt;br&gt;✅ Processed &lt;b&gt;&#x27;+out.length+&#x27;&lt;/b&gt; objects.&lt;br&gt;&lt;br&gt;&lt;button id=&quot;anthrodl&quot; style=&quot;padding:10px 14px;font-size:16px&quot;&gt;Download CSV&lt;/button&gt; &lt;button onclick=&quot;this.parentElement.remove()&quot; style=&quot;padding:10px 14px;font-size:16px&quot;&gt;Close&lt;/button&gt;&#x27;;q(&#x27;#anthrodl&#x27;).onclick=()=&gt;{const a=document.createElement(&#x27;a&#x27;);a.href=url;a.download=fn;document.body.appendChild(a);a.click();a.remove()}})()</textarea>
+      </details>
+    </details>
+  </section>
+
+  <div class="footer">
+    <strong>Important:</strong> Whichever method you use, run the export tool while you are still on
+    the completed Anthropeum results page. Do not refresh or leave the results page before exporting your CSV.
+  </div>
+</main>
+
+<script>
+const bookmarklet = 'javascript:(async()=>{const q=s=>document.querySelector(s),clean=s=>(s||\'\').replace(/\\s+/g,\' \').trim(),esc=s=>\'"\'+String(s??\'\').replace(/"/g,\'""\')+\'"\',num=s=>{const t=clean(s).replace(/[−–—]/g,\'-\').replace(/,/g,\'\');const m=t.match(/[+-]?\\d+(?:\\.\\d+)?/);return m?+m[0]:null},geo=o=>{const a=[o.locale,o.locus,o.city,o.county,o.state,o.subregion,o.region,o.country].filter(Boolean);if(a.length)return(o.geographyType||\'Associated with\')+\': \'+[...new Set(a)].join(\', \');if(o.excavation)return\'Excavation: \'+o.excavation;if(o.culture)return\'Culture: \'+o.culture;if(o.artistNationality)return\'Artist nationality: \'+o.artistNationality;if(o.artistDisplayBio)return\'Artist: \'+o.artistDisplayBio;if(o.period)return\'Period: \'+o.period;if(o.dynasty)return\'Dynasty: \'+o.dynasty;return\'Not specified in The Met API\'},date=o=>o.objectDate||((o.objectBeginDate||o.objectEndDate)?String(o.objectBeginDate||o.objectEndDate)+(o.objectEndDate&&o.objectEndDate!==o.objectBeginDate?\'–\'+o.objectEndDate:\'\'):\'Not specified in The Met API\'),box=document.createElement(\'div\');box.style=\'position:fixed;top:12px;left:10px;right:10px;z-index:2147483647;background:#fff;color:#111;border:2px solid #111;border-radius:10px;padding:14px;font:15px/1.4 sans-serif;max-height:80vh;overflow:auto\';box.innerHTML=\'<b>Anthropeum Mobile Export</b><br><br>Reading results…\';document.body.appendChild(box);const links=[...document.querySelectorAll(\'a[href*="metmuseum.org/art/collection/search/"]\')];if(!links.length){box.innerHTML=\'<b>Anthropeum Mobile Export</b><br><br>❌ No Met-linked results were found. Open your completed Anthropeum results page and try again.<br><br><button onclick="this.parentElement.remove()">Close</button>\';return}const table=links[0].closest(\'table\');if(!table){box.innerHTML=\'<b>Anthropeum Mobile Export</b><br><br>❌ The results table could not be identified.<br><br><button onclick="this.parentElement.remove()">Close</button>\';return}const headers=[...table.querySelectorAll(\'thead th\')].map(x=>clean(x.innerText));const rows=[...table.querySelectorAll(\'tbody tr\')].filter(r=>r.querySelector(\'a[href*="metmuseum.org/art/collection/search/"]\'));const H=headers.map(x=>x.toUpperCase()),scoreI=H.findIndex(x=>x===\'TOTAL\'||x.includes(\'SCORE\')),diffI=H.findIndex(x=>x.includes(\'VS AVG\')||x.includes(\'AVERAGE\')||x.includes(\'DIFF\'));box.innerHTML=\'<b>Anthropeum Mobile Export</b><br><br>Found <b>\'+rows.length+\'</b> objects.<br>Retrieving Met metadata…<br><span id="anthroprog">0/\'+rows.length+\'</span>\';const out=[],d=new Date(),play=String(d.getFullYear()).slice(-2)+\'/\'+String(d.getMonth()+1).padStart(2,\'0\')+\'/\'+String(d.getDate()).padStart(2,\'0\');for(let i=0;i<rows.length;i++){const r=rows[i],cells=[...r.querySelectorAll(\'td\')].map(x=>clean(x.innerText)),l=r.querySelector(\'a[href*="metmuseum.org/art/collection/search/"]\'),m=l.href.match(/search\\/(\\d+)/),id=m&&m[1];let o=null;try{if(id){const res=await fetch(\'https://collectionapi.metmuseum.org/public/collection/v1/objects/\'+id);if(res.ok)o=await res.json()}}catch(e){}let av=\'\';if(scoreI>=0&&diffI>=0){const s=num(cells[scoreI]),v=num(cells[diffI]);if(s!==null&&v!==null)av=(s-v).toLocaleString(\'en-US\',{maximumFractionDigits:2})}out.push([play,...cells,o?geo(o):\'Met API request failed\',o?date(o):\'Met API request failed\',l.href,av]);const p=q(\'#anthroprog\');if(p)p.textContent=(i+1)+\'/\'+rows.length;await new Promise(x=>setTimeout(x,120))}const cols=[\'Date\',...(headers.length?headers:[\'#\',\'ARTIFACT\',\'DISTANCE\',\'GEO\',\'YEAR ERR\',\'TIME\',\'TOTAL\',\'VS AVG\']),\'Met-recorded geography\',\'Met object date\',\'Met collection URL\',\'Average score among other players\'];const csv=\'\\uFEFF\'+[cols,...out].map(r=>r.map(esc).join(\',\')).join(\'\\r\\n\');const blob=new Blob([csv],{type:\'text/csv;charset=utf-8\'}),url=URL.createObjectURL(blob),fn=\'anthropeum-\'+play.replaceAll(\'/\',\'-\')+\'.csv\';box.innerHTML=\'<b>Anthropeum Mobile Export</b><br><br>✅ Processed <b>\'+out.length+\'</b> objects.<br><br><button id="anthrodl" style="padding:10px 14px;font-size:16px">Download CSV</button> <button onclick="this.parentElement.remove()" style="padding:10px 14px;font-size:16px">Close</button>\';q(\'#anthrodl\').onclick=()=>{const a=document.createElement(\'a\');a.href=url;a.download=fn;document.body.appendChild(a);a.click();a.remove()}})()';
+const zipBase64 = "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";
+
+const menuToggle = document.getElementById('menuToggle');
+const chooser = document.getElementById('chooser');
+const panels = [...document.querySelectorAll('.panel')];
+const choices = [...document.querySelectorAll('.choice')];
+
+menuToggle.addEventListener('click', () => {
+  const isOpen = chooser.classList.toggle('open');
+  menuToggle.setAttribute('aria-expanded', String(isOpen));
+});
+
+choices.forEach(choice => {
+  choice.addEventListener('click', () => {
+    const target = choice.dataset.panel;
+    panels.forEach(panel => panel.classList.toggle('active', panel.id === target));
+    chooser.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    document.getElementById(target).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+document.getElementById('downloadZipButton').addEventListener('click', () => {
+  const binary = atob(zipBase64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  const blob = new Blob([bytes], { type: 'application/zip' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'anthropeum-met-extension-1.1.1.zip';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+const copyButton = document.getElementById('copyButton');
+const copyStatus = document.getElementById('copyStatus');
+const codeBox = document.getElementById('codeBox');
+const manualFallback = document.getElementById('manualFallback');
+
+copyButton.addEventListener('click', async () => {
+  copyStatus.textContent = '';
+
+  try {
+    await navigator.clipboard.writeText(bookmarklet);
+    copyStatus.textContent = '✓ Copied! Paste it into the bookmark URL field.';
+    return;
+  } catch (error) {}
+
+  try {
+    codeBox.focus();
+    codeBox.select();
+    codeBox.setSelectionRange(0, codeBox.value.length);
+    const copied = document.execCommand('copy');
+    if (copied) {
+      copyStatus.textContent = '✓ Copied! Paste it into the bookmark URL field.';
+      return;
+    }
+  } catch (error) {}
+
+  manualFallback.open = true;
+  codeBox.focus();
+  codeBox.select();
+  codeBox.setSelectionRange(0, codeBox.value.length);
+  copyStatus.textContent = 'Automatic copying was blocked. Copy the selected code manually.';
+});
+</script>
+</body>
+</html>
